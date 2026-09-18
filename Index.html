@@ -1,67 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <base target="_top">
-  <meta charset="utf-8">
-  <title>Immunization & Stock Registry</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Data & Stock Registry</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; background: #f9f9f9; color: #333; }
-    .form-container { background: #fff; padding: 25px; border-radius: 8px; max-width: 600px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input, select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-    button { background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+    .container { max-width: 650px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    h2 { margin-top: 0; color: #0056b3; text-align: center; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 6px; font-weight: bold; font-size: 14px; }
+    input[type="text"], input[type="date"], input[type="number"], select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    input[type="file"] { padding: 5px; }
+    button { background: #007bff; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; }
     button:hover { background: #0056b3; }
+    button:disabled { background: #cccccc; cursor: not-allowed; }
   </style>
 </head>
 <body>
 
-  <div class="form-container">
-    <h2>Client & Stock Registry</h2>
+  <div class="container">
+    <h2>Immunization & Stock Registry</h2>
     <form id="registryForm">
+      
       <div class="form-group">
-        <label>Staff Name & Designation:</label>
-        <input type="text" id="staffName" required>
+        <label for="Staff Name">Staff Name & Designation:</label>
+        <input type="text" id="Staff Name" placeholder="e.g., Ahmed Shareef, Senior Community Health Officer" required>
       </div>
 
       <div class="form-group">
-        <label>Health Care Facility (HCF):</label>
-        <select id="healthFacility" required>
+        <label for="Health Facility">Health Care Facility (HCF):</label>
+        <select id="Health Facility" required>
           <option value="">-- Select Health Centre --</option>
           <option value="Sh. Funadhoo HC">Sh. Funadhoo HC</option>
           <option value="Sh. Kanditheemu HC">Sh. Kanditheemu HC</option>
           <option value="Sh. Noomaraa HC">Sh. Noomaraa HC</option>
+          <option value="Sh. Goidhoo HC">Sh. Goidhoo HC</option>
+          <option value="Sh. Feydhoo HC">Sh. Feydhoo HC</option>
+          <option value="Sh. Feevah HC">Sh. Feevah HC</option>
+          <option value="Sh. Bilehfahi HC">Sh. Bilehfahi HC</option>
+          <option value="Sh. Foakaidhoo HC">Sh. Foakaidhoo HC</option>
+          <option value="Sh. Narudhoo HC">Sh. Narudhoo HC</option>
+          <option value="Sh. Maroshi HC">Sh. Maroshi HC</option>
+          <option value="Sh. Lhaimagu HC">Sh. Lhaimagu HC</option>
+          <option value="Sh. Komandoo HC">Sh. Komandoo HC</option>
+          <option value="Sh. Maaungoodhoo HC">Sh. Maaungoodhoo HC</option>
           <option value="Sh. Milandhoo HC">Sh. Milandhoo HC</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>Client ID Card Number:</label>
-        <input type="text" id="clientId" required>
+        <label for="clientId">Client ID Card Number:</label>
+        <input type="text" id="clientId" placeholder="e.g., A123456" required>
       </div>
 
       <div class="form-group">
-        <label>Client Name:</label>
-        <input type="text" id="clientName" required>
+        <label for="clientName">Client Name:</label>
+        <input type="text" id="clientName" placeholder="e.g., Ahmed Shareef" required>
       </div>
 
       <div class="form-group">
-        <label>Manufacturer Batch Number:</label>
-        <input type="text" id="batchNumber" required>
+        <label for="Batch Number">Manufacturer Batch Number (Batch 1):</label>
+        <input type="text" id="Batch Number" placeholder="Enter batch number" required>
       </div>
 
       <div class="form-group">
-        <label>Expiry Date:</label>
-        <input type="date" id="expiryDate" required>
+        <label for="Expiry Date">Expiry Date:</label>
+        <input type="date" id="Expiry Date" required>
       </div>
 
       <div class="form-group">
-        <label>Amount on Hand:</label>
-        <input type="number" id="amountOnHand" required>
+        <label for="Amount on Hand">Amount on Hand:</label>
+        <input type="number" id="Amount on Hand" placeholder="Enter quantity" required>
       </div>
 
       <div class="form-group">
-        <label>Upload Document / Photo:</label>
+        <label for="clientFile">Upload Document / Photo:</label>
         <input type="file" id="clientFile">
       </div>
 
@@ -69,7 +83,7 @@
     </form>
   </div>
 
-  <!-- Include separate JS file -->
+  <!-- Links to the separate JS file inside the js subfolder -->
   <script src="js/app.js"></script>
 </body>
 </html>
