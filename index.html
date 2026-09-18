@@ -24,7 +24,7 @@
     <h2>Traveler Vaccine Appointment Request</h2>
     <form id="travelerForm">
       
-      <!-- Gender Selection -->
+      <!-- Gender Selection (Always Visible) -->
       <div class="form-group">
         <label for="Gender">Gender:</label>
         <select id="Gender" required>
@@ -34,79 +34,97 @@
         </select>
       </div>
 
-      <!-- Conditional Pregnancy Question (Appears only if Female is selected) -->
-      <div class="form-group hidden" id="pregnancyGroup">
-        <label for="Are you pregnant">Are you pregnant?</label>
-        <select id="Are you pregnant">
-          <option value="">-- Select an option --</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-      </div>
+      <!-- Rest of the Form (Hidden until gender is selected) -->
+      <div id="conditionalSection" class="hidden">
 
-      <!-- Personal Details Section -->
-      <div class="form-group">
-        <label for="Full Name">Full Name:</label>
-        <input type="text" id="Full Name" placeholder="e.g., Ahmed Shareef" required>
-      </div>
+        <!-- Pregnancy Question (Only shows if Female) -->
+        <div class="form-group hidden" id="pregnancyGroup">
+          <label for="Are you pregnant">Are you pregnant?</label>
+          <select id="Are you pregnant">
+            <option value="">-- Select an option --</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label for="ID Card Number">ID Card Number:</label>
-        <input type="text" id="ID Card Number" placeholder="e.g., A123456" required>
-      </div>
+        <!-- Personal Details Section -->
+        <div class="form-group">
+          <label for="Full Name">Full Name:</label>
+          <input type="text" id="Full Name" placeholder="e.g., Ahmed Shareef">
+        </div>
 
-      <div class="form-group">
-        <label for="idCardFile">Upload ID Card Document / Photo:</label>
-        <input type="file" id="idCardFile">
-      </div>
+        <div class="form-group">
+          <label for="ID Card Number">ID Card Number:</label>
+          <input type="text" id="ID Card Number" placeholder="e.g., A123456">
+        </div>
 
-      <div class="form-group">
-        <label for="Passport Number">Passport Number (Optional):</label>
-        <input type="text" id="Passport Number" placeholder="e.g., A9876543">
-      </div>
+        <div class="form-group">
+          <label for="idCardFile">Upload ID Card Document / Photo:</label>
+          <input type="file" id="idCardFile">
+        </div>
 
-      <div class="form-group">
-        <label for="passportFile">Upload Passport Document / Photo:</label>
-        <input type="file" id="passportFile">
-      </div>
+        <div class="form-group">
+          <label for="Passport Number">Passport Number (Optional):</label>
+          <input type="text" id="Passport Number" placeholder="e.g., A9876543">
+        </div>
 
-      <div class="form-group">
-        <label for="Date of Birth">Date of Birth:</label>
-        <input type="date" id="Date of Birth" required>
-      </div>
+        <div class="form-group">
+          <label for="passportFile">Upload Passport Document / Photo:</label>
+          <input type="file" id="passportFile">
+        </div>
 
-      <div class="form-group">
-        <label for="Residing Atoll and Island">Residing Atoll & Island:</label>
-        <input type="text" id="Residing Atoll and Island" placeholder="e.g., Sh. Funadhoo" required>
-      </div>
+        <div class="form-group">
+          <label for="Date of Birth">Date of Birth:</label>
+          <input type="date" id="Date of Birth">
+        </div>
 
-      <div class="form-group">
-        <label for="Current Address">Current Address:</label>
-        <input type="text" id="Current Address" placeholder="e.g., Fihaaraage" required>
-      </div>
+        <div class="form-group">
+          <label for="Residing Atoll and Island">Residing Atoll & Island:</label>
+          <input type="text" id="Residing Atoll and Island" placeholder="e.g., Sh. Funadhoo">
+        </div>
 
-      <div class="form-group">
-        <label for="Contact Number">Contact Number:</label>
-        <input type="tel" id="Contact Number" placeholder="e.g., 7912345" required>
-      </div>
+        <div class="form-group">
+          <label for="Current Address">Current Address:</label>
+          <input type="text" id="Current Address" placeholder="e.g., Fihaaraage">
+        </div>
 
-      <button type="submit" id="submitBtn">Submit Request</button>
+        <div class="form-group">
+          <label for="Contact Number">Contact Number:</label>
+          <input type="tel" id="Contact Number" placeholder="e.g., 7912345">
+        </div>
+
+        <button type="submit" id="submitBtn">Submit Request</button>
+
+      </div>
     </form>
   </div>
 
-  <!-- Script to handle toggle behavior -->
+  <!-- Script to manage conditional visibility -->
   <script>
     document.getElementById("Gender").addEventListener("change", function() {
+      const gender = this.value;
+      const conditionalSection = document.getElementById("conditionalSection");
       const pregnancyGroup = document.getElementById("pregnancyGroup");
       const pregnancySelect = document.getElementById("Are you pregnant");
       
-      if (this.value === "Female") {
-        pregnancyGroup.classList.remove("hidden");
-        pregnancySelect.setAttribute("required", "true");
-      } else {
+      if (gender === "") {
+        // Hide everything if reset
+        conditionalSection.classList.add("hidden");
         pregnancyGroup.classList.add("hidden");
         pregnancySelect.removeAttribute("required");
-        pregnancySelect.value = ""; // Clear value if hidden
+        pregnancySelect.value = "";
+      } else {
+        // Show main personal details section
+        conditionalSection.classList.remove("hidden");
+
+        if (gender === "Female") {
+          pregnancyGroup.classList.remove("hidden");
+          pregnancySelect.setAttribute("required", "true");
+        } else {
+          pregnancyGroup.classList.add("hidden");
+          pregnancySelect.removeAttribute("required");
+          pregnancySelect.value = "";
+        }
       }
     });
   </script>
