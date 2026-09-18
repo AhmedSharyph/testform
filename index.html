@@ -12,6 +12,7 @@
     label { display: block; margin-bottom: 6px; font-weight: bold; font-size: 14px; }
     input[type="text"], input[type="date"], input[type="tel"], select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
     input[type="file"] { padding: 5px; }
+    .hidden { display: none; }
     button { background: #007bff; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; }
     button:hover { background: #0056b3; }
     button:disabled { background: #cccccc; cursor: not-allowed; }
@@ -23,6 +24,7 @@
     <h2>Traveler Vaccine Appointment Request</h2>
     <form id="travelerForm">
       
+      <!-- Gender Selection -->
       <div class="form-group">
         <label for="Gender">Gender:</label>
         <select id="Gender" required>
@@ -32,6 +34,17 @@
         </select>
       </div>
 
+      <!-- Conditional Pregnancy Question (Appears only if Female is selected) -->
+      <div class="form-group hidden" id="pregnancyGroup">
+        <label for="Are you pregnant">Are you pregnant?</label>
+        <select id="Are you pregnant">
+          <option value="">-- Select an option --</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <!-- Personal Details Section -->
       <div class="form-group">
         <label for="Full Name">Full Name:</label>
         <input type="text" id="Full Name" placeholder="e.g., Ahmed Shareef" required>
@@ -80,6 +93,23 @@
       <button type="submit" id="submitBtn">Submit Request</button>
     </form>
   </div>
+
+  <!-- Script to handle toggle behavior -->
+  <script>
+    document.getElementById("Gender").addEventListener("change", function() {
+      const pregnancyGroup = document.getElementById("pregnancyGroup");
+      const pregnancySelect = document.getElementById("Are you pregnant");
+      
+      if (this.value === "Female") {
+        pregnancyGroup.classList.remove("hidden");
+        pregnancySelect.setAttribute("required", "true");
+      } else {
+        pregnancyGroup.classList.add("hidden");
+        pregnancySelect.removeAttribute("required");
+        pregnancySelect.value = ""; // Clear value if hidden
+      }
+    });
+  </script>
 
   <!-- Links to the separate JS file inside the js subfolder -->
   <script src="js/app.js"></script>
