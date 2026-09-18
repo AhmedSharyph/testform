@@ -12,6 +12,7 @@
     label { display: block; margin-bottom: 6px; font-weight: bold; font-size: 14px; }
     input[type="text"], input[type="date"], input[type="tel"], select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
     input[type="file"] { padding: 5px; }
+    select:disabled { background-color: #e9ecef; color: #495057; cursor: not-allowed; }
     .hidden { display: none; }
     button { background: #007bff; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; }
     button:hover { background: #0056b3; }
@@ -24,7 +25,7 @@
     <h2>Traveler Vaccine Appointment Request</h2>
     <form id="travelerForm">
       
-      <!-- Gender Selection -->
+      <!-- Gender Selection (Will be locked/disabled after selection) -->
       <div class="form-group" id="genderGroup">
         <label for="Gender">Gender:</label>
         <select id="Gender" required>
@@ -99,18 +100,18 @@
     </form>
   </div>
 
-  <!-- Script to manage conditional visibility and lock gender selection -->
+  <!-- Script to manage conditional visibility and lock (disable) gender selection -->
   <script>
     document.getElementById("Gender").addEventListener("change", function() {
       const gender = this.value;
-      const genderGroup = document.getElementById("genderGroup");
+      const genderSelect = document.getElementById("Gender");
       const conditionalSection = document.getElementById("conditionalSection");
       const pregnancyGroup = document.getElementById("pregnancyGroup");
       const pregnancySelect = document.getElementById("Are you pregnant");
       
       if (gender !== "") {
-        // Hide the gender selection box once chosen so it can't be changed
-        genderGroup.classList.add("hidden");
+        // Disable the dropdown so it stays visible but locked
+        genderSelect.setAttribute("disabled", "true");
         
         // Show the rest of the form
         conditionalSection.classList.remove("hidden");
