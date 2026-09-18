@@ -24,8 +24,8 @@
     <h2>Traveler Vaccine Appointment Request</h2>
     <form id="travelerForm">
       
-      <!-- Gender Selection (Always Visible) -->
-      <div class="form-group">
+      <!-- Gender Selection -->
+      <div class="form-group" id="genderGroup">
         <label for="Gender">Gender:</label>
         <select id="Gender" required>
           <option value="">-- Select Gender --</option>
@@ -99,22 +99,20 @@
     </form>
   </div>
 
-  <!-- Script to manage conditional visibility -->
+  <!-- Script to manage conditional visibility and lock gender selection -->
   <script>
     document.getElementById("Gender").addEventListener("change", function() {
       const gender = this.value;
+      const genderGroup = document.getElementById("genderGroup");
       const conditionalSection = document.getElementById("conditionalSection");
       const pregnancyGroup = document.getElementById("pregnancyGroup");
       const pregnancySelect = document.getElementById("Are you pregnant");
       
-      if (gender === "") {
-        // Hide everything if reset
-        conditionalSection.classList.add("hidden");
-        pregnancyGroup.classList.add("hidden");
-        pregnancySelect.removeAttribute("required");
-        pregnancySelect.value = "";
-      } else {
-        // Show main personal details section
+      if (gender !== "") {
+        // Hide the gender selection box once chosen so it can't be changed
+        genderGroup.classList.add("hidden");
+        
+        // Show the rest of the form
         conditionalSection.classList.remove("hidden");
 
         if (gender === "Female") {
