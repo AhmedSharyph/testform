@@ -1,0 +1,54 @@
+var SHEET_ID = "1y1HFmHiSHoRMPVc5xFzxxi4lcLXZpOZ1iaX5JlufkPU";
+var PARENT_FOLDER_ID = "1JMfnKd20UKNb51LFLryAl4TTAJtLYnUs";
+
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile('Index')
+      .setTitle('Client Data & File Registry')
+      .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}
+
+function processFormSubmission(data) {
+  var sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+  
+  // 1. Get or Create Client Folder (Naming convention: id_name)
+  var clientFolder = getOrCreateClientFolder(PARENT_FOLDER_ID, data.clientId, data.clientName);
+  var fileUrl = "";
+  
+  // 2. Handle file upload if present
+  if (data.fileData && data.fileName && data.mimeType) {
+    var decodedBytes = Utilities.base64Decode(data.fileData);
+    var blob = Utilities.newBlob(decodedBytes, data.mimeType, data.fileName);
+    var uploadedFile = clientFolder.createFile(blob);
+    fileUrl = uploadedFile.getUrl();
+  }
+  
+  // 3. Append row to Google Sheet
+  sheet.appendRow([
+    new Date(),
+    data.staffName,
+    data.healthFacility,
+    data.clientId,
+    data.clientName,
+    data.batchNumber,
+    data.expiryDate,
+    data.amountOnHand,
+    fileUrl
+  ]);
+  
+  return { success: true, message: "Successfully recorded and uploaded!" };
+}
+
+function getOrCreateClientFolder(parentFolderId, clientId, clientName) {
+  var parentFolder = DriveApp.getFolderById(parentFolderId);
+  
+  // Clean name and format: id_name
+  var cleanName = clientName.trim().replace(/\s+/g, "_").toLowerCase();
+  var folderName = clientId.trim().toLowerCase() + "_" + cleanName;
+  
+  var folders = parentFolder.getFoldersByName(folderName);
+  if (folders.hasNext()) {
+    return folders.next();
+  } else {
+    return parentFolder.createFolder(folderName);
+  }
+}
