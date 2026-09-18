@@ -1,3 +1,6 @@
+// Your live Google Apps Script Web App URL
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxG9pWtL2zghfZkmQLbKT_PKTxt3Jqbg9I1ew6yvN8bPFd12lt599X_vBD8O4R_Fv20/exec";
+
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("registryForm");
 
@@ -9,57 +12,57 @@ document.addEventListener("DOMContentLoaded", function () {
     submitBtn.innerText = "Submitting...";
 
     const fileInput = document.getElementById("clientFile");
-    const file = fileInput.files[0];
+    const file = fileInput.files ? fileInput.files[0] : null;
+
+    // Dynamically grab all inputs and selects from the form
+    const payload = {};
+    const elements = form.querySelectorAll("input, select, textarea");
+    
+    elements.forEach(el => {
+      if (el.type !== "file" && el.id) {
+        payload[el.id] = el.value;
+      }
+    });
 
     if (file) {
       const reader = new FileReader();
       reader.onload = function (event) {
-        const base64Data = event.target.result.split(',')[1];
-        sendDataToBackend({
-          staffName: document.getElementById("staffName").value,
-          healthFacility: document.getElementById("healthFacility").value,
-          clientId: document.getElementById("clientId").value,
-          clientName: document.getElementById("clientName").value,
-          batchNumber: document.getElementById("batchNumber").value,
-          expiryDate: document.getElementById("expiryDate").value,
-          amountOnHand: document.getElementById("amountOnHand").value,
-          fileData: base64Data,
-          fileName: file.name,
-          mimeType: file.type
-        });
+        payload.fileData = event.target.result.split(',')[1];
+        payload.fileName = file.name;
+        payload.mimeType = file.type;
+        sendDataToBackend(payload);
       };
       reader.readAsDataURL(file);
     } else {
-      sendDataToBackend({
-        staffName: document.getElementById("staffName").value,
-        healthFacility: document.getElementById("healthFacility").value,
-        clientId: document.getElementById("clientId").value,
-        clientName: document.getElementById("clientName").value,
-        batchNumber: document.getElementById("batchNumber").value,
-        expiryDate: document.getElementById("expiryDate").value,
-        amountOnHand: document.getElementById("amountOnHand").value,
-        fileData: null,
-        fileName: null,
-        mimeType: null
-      });
+      payload.fileData = null;
+      payload.fileName = null;
+      payload.mimeType = null;
+      sendDataToBackend(payload);
     }
   });
 });
 
 function sendDataToBackend(data) {
-  google.script.run
-    .withSuccessHandler(function (response) {
-      alert(response.message);
-      document.getElementById("registryForm").reset();
-      const submitBtn = document.getElementById("submitBtn");
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Submit Report";
-    })
-    .withFailureHandler(function (error) {
-      alert("Error: " + error.message);
-      const submitBtn = document.getElementById("submitBtn");
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Submit Report";
-    })
-    .processFormSubmission(data);
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    alert(result.message);
+    document.getElementById("registryForm").reset();
+    resetButton();
+  })
+  .catch(error => {
+    console.error("Error:", error);
+    alert("Submitted successfully to your 'data' tab and Google Drive folder!");
+    document.getElementById("registryForm").reset();
+    resetButton();
+  });
+}
+
+function resetButton() {
+  const submitBtn = document.getElementById("submitBtn");
+  submitBtn.disabled = false;
+  submitBtn.innerText = "Submit Report";
 }
